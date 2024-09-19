@@ -1,0 +1,9 @@
+[package]
+name = "roguelike"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crossterm = "0.28.1"
+specs = "0.20.0"
+specs-derive = "0.4.1"
