@@ -1,23 +1,27 @@
-use std::{thread, time::{Duration, Instant}};
+use std::{
+    thread,
+    time::{Duration, Instant},
+};
 
-use crate::{camera::Camera, utils::{position::Position, renderable::Renderable}, GameState, State};
+use crate::{
+    camera::Camera,
+    utils::{position::Position, renderable::Renderable},
+    GameState, State,
+};
 
 const FPS: u64 = 30; // Desired frames per second
 const FRAME_DURATION: Duration = Duration::from_millis(1000 / FPS);
 
 pub struct Ctx {
-    pub cam: Camera
+    pub cam: Camera,
 }
 
 impl Ctx {
     pub fn new() -> Self {
-        Ctx {
-            cam: Camera::new()
-        }
+        Ctx { cam: Camera::new() }
     }
 
-    pub fn main_loop(&mut self, mut gs: State ) {
-
+    pub fn main_loop(&mut self, mut gs: State) {
         let mut last_frame_time = Instant::now();
 
         '_game_loop: loop {
@@ -37,11 +41,13 @@ impl Ctx {
             // Update the last frame time
             last_frame_time = Instant::now();
         }
-
     }
 
     pub fn set(&mut self, pos: &Position, renderable: &Renderable) {
+        self.cam.buffer.push((*pos, *renderable));
+    }
 
-        self.cam.buffer.push( (*pos, *renderable) );
+    pub fn cls(&self) {
+        print!("{esc}c", esc = 27 as char);
     }
 }

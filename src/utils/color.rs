@@ -1,4 +1,3 @@
-
 #[derive(Copy, Clone)]
 pub enum Color {
     Default,
@@ -9,7 +8,7 @@ pub enum Color {
     Blue,
     Magenta,
     Cyan,
-    White
+    White,
 }
 
 impl Color {
@@ -23,7 +22,7 @@ impl Color {
             Color::Blue => 4,
             Color::Magenta => 5,
             Color::Cyan => 6,
-            Color::White => 7
+            Color::White => 7,
         }
     }
 }
