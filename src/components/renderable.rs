@@ -3,7 +3,7 @@ use std::fmt;
 use specs::prelude::*;
 use specs_derive::Component;
 
-use super::color::Color;
+use crate::utils::color::Color;
 
 #[derive(Component, Copy, Clone)]
 pub struct Renderable {

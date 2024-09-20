@@ -2,7 +2,7 @@ use std::io::{stdout, Write};
 
 use crossterm::{cursor, style::Print, terminal, QueueableCommand};
 
-use crate::utils::{position::Position, renderable::Renderable};
+use crate::components::{position::Position, renderable::Renderable};
 
 pub struct Camera {
     pub pos: Position,

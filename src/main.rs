@@ -1,15 +1,16 @@
 use camera::Camera;
+use components::{position::Position, renderable::Renderable};
 use crossterm::event::KeyCode;
 use ctx::Ctx;
 use specs::prelude::*;
 use specs_derive::Component;
-use utils::renderable::Renderable;
 
-mod camera;
-mod ctx;
-mod utils;
 
-use crate::utils::position::Position;
+pub mod components;
+pub mod camera;
+pub mod ctx;
+pub mod utils;
+
 
 pub trait GameState {
     fn tick(&mut self, ctx: &mut Ctx);
@@ -69,7 +70,6 @@ fn try_move_player(delta_pos: Position, ecs: &mut World) {
     let mut positions = ecs.write_storage::<Position>();
     let mut players = ecs.write_storage::<Player>();
 
-    
     for (_player, pos) in (&mut players, &mut positions).join() {
         pos.x += delta_pos.x;
         pos.y += delta_pos.y;
@@ -79,18 +79,16 @@ fn try_move_player(delta_pos: Position, ecs: &mut World) {
 fn player_input(gs: &mut State, ctx: &mut Ctx) {
     // Player movement
     for key in ctx.input_handler.get_key_states() {
-
         if key.1 == false {
             continue;
         }
 
         match key.0 {
-            KeyCode::Left => try_move_player(Position{x: -1, y: 0}, &mut gs.ecs),
-            KeyCode::Right => try_move_player(Position{x: 1, y: 0}, &mut gs.ecs),
-            KeyCode::Up => try_move_player(Position{x: 0, y: 1}, &mut gs.ecs),
-            KeyCode::Down => try_move_player(Position{x: 0, y: -1}, &mut gs.ecs),
-
-            _ => {},
+            KeyCode::Left => try_move_player(Position { x: -1, y: 0 }, &mut gs.ecs),
+            KeyCode::Right => try_move_player(Position { x: 1, y: 0 }, &mut gs.ecs),
+            KeyCode::Up => try_move_player(Position { x: 0, y: 1 }, &mut gs.ecs),
+            KeyCode::Down => try_move_player(Position { x: 0, y: -1 }, &mut gs.ecs),
+            _ => {}
         }
     }
 }
@@ -104,7 +102,7 @@ fn main() {
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<LeftMover>();
     gs.ecs.register::<Player>();
-    
+
     gs.ecs
         .create_entity()
         .with(Position { x: 10, y: 0 })

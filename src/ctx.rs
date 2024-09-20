@@ -6,12 +6,10 @@ use std::{
 use crossterm::terminal;
 
 use crate::{
-    camera::Camera,
-    utils::{input_handler::InputHandler, position::Position, renderable::Renderable},
-    GameState, State,
+    camera::Camera, components::{position::Position, renderable::Renderable}, utils::input_handler::InputHandler, GameState, State
 };
 
-const FPS: u64 = 30; // Desired frames per second
+const FPS: u64 = 20; // Desired frames per second
 const FRAME_DURATION: Duration = Duration::from_millis(1000 / FPS);
 
 pub struct Ctx {
