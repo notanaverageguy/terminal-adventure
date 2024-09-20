@@ -29,7 +29,7 @@ impl Map {
         let mut tiles: Vec<Tile> = vec![];
 
         for x in 0..100 {
-            for y in 0..25 {
+            for y in 0..20 {
                 let tile = Tile {
                     pos: Position{ x, y},
                     r#type: TileType::Floor

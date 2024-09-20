@@ -31,7 +31,7 @@ impl State {
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut Ctx) {
-        
+        ctx.cls();
         {
             let map = self.ecs.fetch::<Map>();
             map.draw_map(ctx);

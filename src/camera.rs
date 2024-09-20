@@ -40,6 +40,7 @@ impl Camera {
 
     pub fn render(&mut self) {
         let mut stdout = stdout();
+
         let terminal_size = terminal::size().unwrap();
 
         for (pos, renderable) in &self.buffer {
@@ -47,14 +48,17 @@ impl Camera {
             adjusted_pos.y = terminal_size.1 as isize - adjusted_pos.y - 2;
 
             if !Self::is_visible(terminal_size, adjusted_pos) {
-                return;
+                continue;
             }
 
             stdout
                 .queue(cursor::MoveTo(adjusted_pos.x as u16, adjusted_pos.y as u16))
                 .unwrap();
             stdout.queue(Print(renderable.to_string())).unwrap();
+            // print!("{adjusted_pos:?}");
         }
+        // stdout.queue(cursor::MoveTo(0, 0));
+        // print!("{:?}", self.pos);
 
         stdout.flush().unwrap();
 
