@@ -6,7 +6,10 @@ use std::{
 use crossterm::terminal;
 
 use crate::{
-    camera::Camera, components::{position::Position, renderable::Renderable}, utils::input_handler::InputHandler, GameState, State
+    camera::Camera,
+    components::{position::Position, renderable::Renderable},
+    utils::input_handler::InputHandler,
+    GameState, State,
 };
 
 const FPS: u64 = 20; // Desired frames per second
