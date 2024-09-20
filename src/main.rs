@@ -1,6 +1,7 @@
 use camera::Camera;
 use components::{position::Position, renderable::Renderable};
 use ctx::Ctx;
+use map::Map;
 use player::Player;
 use specs::prelude::*;
 use specs_derive::Component;
@@ -10,6 +11,7 @@ pub mod components;
 pub mod ctx;
 pub mod player;
 pub mod utils;
+pub mod map;
 
 pub trait GameState {
     fn tick(&mut self, ctx: &mut Ctx);
@@ -29,7 +31,11 @@ impl State {
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut Ctx) {
-        ctx.cls();
+        
+        {
+            let map = self.ecs.fetch::<Map>();
+            map.draw_map(ctx);
+        }
 
         player::player_input(self, ctx);
         self.run_systems();
@@ -95,6 +101,8 @@ fn main() {
             .with(LeftMover {})
             .build();
     }
+
+    gs.ecs.insert(Map::new_map());
 
     Camera::load_terminal_settings();
     context.main_loop(gs);
