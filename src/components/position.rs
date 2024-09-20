@@ -2,8 +2,7 @@ use std::ops::{Add, Sub};
 
 use specs::prelude::*;
 use specs_derive::Component;
-
-#[derive(Component, Debug, Copy, Clone)]
+#[derive(Component, Debug, Copy, Clone, Eq, Hash, PartialEq)]
 pub struct Position {
     pub x: isize,
     pub y: isize,

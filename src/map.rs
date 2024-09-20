@@ -1,52 +1,67 @@
-use crate::{components::{position::Position, renderable::Renderable}, ctx::Ctx, utils::color::Color};
+use std::collections::HashMap;
 
-pub enum TileType {
+use crate::{
+    components::{position::Position, renderable::Renderable},
+    ctx::Ctx,
+    utils::color::Color,
+};
+
+pub enum Tile {
     Wall,
     Floor,
 }
 
-pub struct Tile {
-    pos: Position,
-    r#type: TileType,
-}
-
 impl Tile {
     pub fn to_renderable(&self) -> Renderable {
-        match self.r#type {
-            TileType::Wall => Renderable { glyph: ' ', fg: Color::Black, bg: Color::Black },
-            TileType::Floor => Renderable { glyph: '·', fg: Color::Black, bg: Color::Default },
+        match self {
+            Tile::Wall => Renderable {
+                glyph: '#',
+                fg: Color::Black,
+                bg: Color::Default,
+            },
+            Tile::Floor => Renderable {
+                glyph: '·',
+                fg: Color::Black,
+                bg: Color::Default,
+            },
+        }
+    }
+
+    pub fn passable(&self) -> bool {
+        match self {
+            Tile::Wall => false,
+            Tile::Floor => true,
         }
     }
 }
 
 pub struct Map {
-    tiles: Vec<Tile>
+    tiles: HashMap<Position, Tile>,
 }
-
 
 impl Map {
     pub fn new_map() -> Self {
-        let mut tiles: Vec<Tile> = vec![];
+        let mut tiles: HashMap<Position, Tile> = HashMap::new();
 
         for x in 0..100 {
-            for y in 0..20 {
-                let tile = Tile {
-                    pos: Position{ x, y},
-                    r#type: TileType::Floor
-                };
+            for y in 0..30 {
+                let pos = Position { x, y };
+                let tile = Tile::Floor;
 
-                tiles.push(tile);
+                tiles.insert(pos, tile);
             }
         }
 
-        Map {
-            tiles
-        }
+        Map { tiles }
     }
 
     pub fn draw_map(&self, ctx: &mut Ctx) {
-        for tile in &self.tiles {
-            ctx.cam.buffer.push( (tile.pos, tile.to_renderable()));
+        for (pos, tile) in &self.tiles {
+            ctx.cam.buffer.push((*pos, tile.to_renderable()));
         }
+    }
+
+    pub fn get_tile_at(&self, pos: Position) -> Option<&Tile> {
+        self.tiles.get(&pos)
     }
 }

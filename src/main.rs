@@ -9,9 +9,9 @@ use specs_derive::Component;
 pub mod camera;
 pub mod components;
 pub mod ctx;
+pub mod map;
 pub mod player;
 pub mod utils;
-pub mod map;
 
 pub trait GameState {
     fn tick(&mut self, ctx: &mut Ctx);
@@ -31,7 +31,7 @@ impl State {
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut Ctx) {
-        ctx.cls();
+        // ctx.cls();
         {
             let map = self.ecs.fetch::<Map>();
             map.draw_map(ctx);

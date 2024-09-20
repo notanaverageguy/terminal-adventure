@@ -34,6 +34,11 @@ impl Ctx {
         self.input_handler.start();
 
         '_game_loop: loop {
+            if self.should_stop() {
+                self.input_handler.stop(); // Stop the input handling thread.
+                break; // Exit the game loop.
+            }
+
             let now = Instant::now();
 
             gs.tick(self);
@@ -62,5 +67,10 @@ impl Ctx {
 
     pub fn get_terminal_size() -> (u16, u16) {
         terminal::size().unwrap()
+    }
+
+    pub fn should_stop(&mut self) -> bool {
+        self.input_handler
+            .get_key_once(&crossterm::event::KeyCode::Char('q'))
     }
 }
