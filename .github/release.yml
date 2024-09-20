@@ -1,0 +1,30 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+  categories:
+    - title: Breaking Changes 🛠
+      labels:
+        - breaking-change
+    - title: New Features 🎉
+      labels:
+        - feature
+    - title: Combat and Gameplay Tweaks ⚔️
+      labels:
+        - combat
+        - gameplay-tweak
+    - title: Bug Fixes 🐛
+      labels:
+        - bug
+        - bugfix
+    - title: Performance Improvements 🚀
+      labels:
+        - performance
+        - optimization
+    - title: Visual and UI Changes 🖼
+      labels:
+        - ui
+        - visual
+    - title: Other Changes
+      labels:
+        - "*"

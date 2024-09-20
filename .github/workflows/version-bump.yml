@@ -1,0 +1,25 @@
+name: Version Bump
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  bump-version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Cargo Bump
+        run: cargo install cargo-bump
+      - name: Bump version
+        run: cargo bump patch
+      - name: Commit changes
+        run: |
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+          git add Cargo.toml
+          git commit -m "Automatically bumped version after merge"
+      - name: Push changes
+        run: git push origin HEAD
