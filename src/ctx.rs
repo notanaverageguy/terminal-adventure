@@ -3,9 +3,11 @@ use std::{
     time::{Duration, Instant},
 };
 
+use crossterm::terminal;
+
 use crate::{
     camera::Camera,
-    utils::{position::Position, renderable::Renderable},
+    utils::{input_handler::InputHandler, position::Position, renderable::Renderable},
     GameState, State,
 };
 
@@ -14,15 +16,21 @@ const FRAME_DURATION: Duration = Duration::from_millis(1000 / FPS);
 
 pub struct Ctx {
     pub cam: Camera,
+    pub input_handler: InputHandler,
 }
 
 impl Ctx {
     pub fn new() -> Self {
-        Ctx { cam: Camera::new() }
+        Ctx {
+            cam: Camera::new(),
+            input_handler: InputHandler::new(),
+        }
     }
 
     pub fn main_loop(&mut self, mut gs: State) {
         let mut last_frame_time = Instant::now();
+
+        self.input_handler.start();
 
         '_game_loop: loop {
             let now = Instant::now();
@@ -49,5 +57,9 @@ impl Ctx {
 
     pub fn cls(&self) {
         print!("{esc}c", esc = 27 as char);
+    }
+
+    pub fn get_terminal_size() -> (u16, u16) {
+        terminal::size().unwrap()
     }
 }
