@@ -13,10 +13,7 @@ pub fn get_camera_pos(gs: &State) -> Option<Position> {
 
     let t_size = terminal::size().unwrap();
 
-    // let a = Position {x: t_size.0 as isize / 2, y: t_size.1 as isize / 2};
-
     for (_player, pos) in (&players, &positions).join() {
-        // return Some(*pos + Position {x: t_size.0 as isize, y: t_size.1 as isize} / 2);
         return Some(Position {x: pos.x - t_size.0 as isize / 2, y: pos.y - t_size.1 as isize / 2});
     }
 

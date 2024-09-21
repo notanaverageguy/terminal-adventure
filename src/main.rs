@@ -31,7 +31,7 @@ impl State {
 
 impl GameState for State {
     fn tick(&mut self, ctx: &mut Ctx) {
-        // ctx.cls();
+        ctx.cls();
         {
             let map = self.ecs.fetch::<Map>();
             map.draw_map(ctx);
@@ -46,7 +46,12 @@ impl GameState for State {
 
         let positions = self.ecs.read_storage::<Position>();
         let renderables = self.ecs.read_storage::<Renderable>();
+        let players = self.ecs.read_storage::<Player>();
 
+        for (pos, _player) in (&positions, &players).join() {
+            let mut map = self.ecs.fetch_mut::<Map>();
+            map.reveal_fov(*pos);
+        }
 
         for (pos, render) in (&positions, &renderables).join() {
             ctx.set(pos, render);
