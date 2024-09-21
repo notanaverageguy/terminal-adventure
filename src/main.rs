@@ -40,8 +40,13 @@ impl GameState for State {
         player::player_input(self, ctx);
         self.run_systems();
 
+        if let Some(pos) = player::get_camera_pos(self) {
+            ctx.set_cam_pos(pos);
+        }
+
         let positions = self.ecs.read_storage::<Position>();
         let renderables = self.ecs.read_storage::<Renderable>();
+
 
         for (pos, render) in (&positions, &renderables).join() {
             ctx.set(pos, render);

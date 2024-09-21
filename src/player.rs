@@ -1,4 +1,4 @@
-use crossterm::event::KeyCode;
+use crossterm::{event::KeyCode, terminal};
 use specs::prelude::*;
 use specs_derive::Component;
 
@@ -6,6 +6,22 @@ use crate::{components::position::Position, ctx::Ctx, map::Map, State};
 
 #[derive(Component, Debug)]
 pub struct Player {}
+
+pub fn get_camera_pos(gs: &State) -> Option<Position> {
+    let positions = gs.ecs.write_storage::<Position>();
+    let players = gs.ecs.write_storage::<Player>();
+
+    let t_size = terminal::size().unwrap();
+
+    // let a = Position {x: t_size.0 as isize / 2, y: t_size.1 as isize / 2};
+
+    for (_player, pos) in (&players, &positions).join() {
+        // return Some(*pos + Position {x: t_size.0 as isize, y: t_size.1 as isize} / 2);
+        return Some(Position {x: pos.x - t_size.0 as isize / 2, y: pos.y - t_size.1 as isize / 2});
+    }
+
+    None
+}
 
 pub fn try_move_player(delta_pos: Position, ecs: &mut World) {
     let mut positions = ecs.write_storage::<Position>();

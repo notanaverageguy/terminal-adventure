@@ -60,7 +60,7 @@ impl Map {
 
     pub fn draw_map(&self, ctx: &mut Ctx) {
         for (pos, tile) in &self.tiles {
-            ctx.cam.buffer.push((*pos, tile.to_renderable()));
+            ctx.set(pos, &tile.to_renderable());
         }
     }
 
