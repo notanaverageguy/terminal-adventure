@@ -39,6 +39,17 @@ pub fn player_input(gs: &mut State, ctx: &mut Ctx) {
             KeyCode::Right => try_move_player(Position { x: 1, y: 0 }, &mut gs.ecs),
             KeyCode::Up => try_move_player(Position { x: 0, y: 1 }, &mut gs.ecs),
             KeyCode::Down => try_move_player(Position { x: 0, y: -1 }, &mut gs.ecs),
+
+            KeyCode::Char('a') => try_move_player(Position { x: -1, y: 0 }, &mut gs.ecs),
+            KeyCode::Char('d') => try_move_player(Position { x: 1, y: 0 }, &mut gs.ecs),
+            KeyCode::Char('w') => try_move_player(Position { x: 0, y: 1 }, &mut gs.ecs),
+            KeyCode::Char('s') => try_move_player(Position { x: 0, y: -1 }, &mut gs.ecs),
+
+            KeyCode::Char('h') => try_move_player(Position { x: -1, y: 0 }, &mut gs.ecs),
+            KeyCode::Char('l') => try_move_player(Position { x: 1, y: 0 }, &mut gs.ecs),
+            KeyCode::Char('k') => try_move_player(Position { x: 0, y: 1 }, &mut gs.ecs),
+            KeyCode::Char('j') => try_move_player(Position { x: 0, y: -1 }, &mut gs.ecs),
+
             _ => {}
         }
     }
