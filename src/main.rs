@@ -77,32 +77,20 @@ fn main() {
     gs.ecs.register::<Renderable>();
     gs.ecs.register::<LeftMover>();
     gs.ecs.register::<Player>();
-
+    
+    let (starting_pos, map) = Map::new_dungeon_floor();
     gs.ecs
         .create_entity()
-        .with(Position { x: 10, y: 0 })
+        .with(starting_pos)
         .with(Renderable {
-            glyph: '☺',
+            glyph: '@',
             fg: utils::color::Color::Green,
             bg: utils::color::Color::Default,
         })
         .with(Player {})
         .build();
 
-    for i in 0..10 {
-        gs.ecs
-            .create_entity()
-            .with(Position { x: 7 * i, y: 20 })
-            .with(Renderable {
-                glyph: '@',
-                fg: utils::color::Color::Red,
-                bg: utils::color::Color::Default,
-            })
-            .with(LeftMover {})
-            .build();
-    }
-
-    gs.ecs.insert(Map::new_map());
+    gs.ecs.insert(map);
 
     Camera::load_terminal_settings();
     context.main_loop(gs);
