@@ -122,10 +122,10 @@ impl Map {
 
             let x = rng.gen_range(1..DUNGEON_SIZE.0) as isize;
             let y = rng.gen_range(1..DUNGEON_SIZE.1) as isize;
-            let w = rng.gen_range(MIN_ROOM_SIZE..MAX_ROOM_SIZE + 3); // Bias towards being longer instead of taller
+            let w = rng.gen_range(MIN_ROOM_SIZE..MAX_ROOM_SIZE); // Bias towards being longer instead of taller
             let h = rng.gen_range(MIN_ROOM_SIZE..MAX_ROOM_SIZE);
 
-            let new_room = Rectangle::new(Position { x, y }, Position { x: x + w, y: y + h });
+            let new_room = Rectangle::new(Position { x, y }, Position { x: x + w + 5, y: y + h });
 
             if new_room.p2.x >= DUNGEON_SIZE.0 || new_room.p2.y >= DUNGEON_SIZE.1 {
                 continue 'room_gen;
@@ -176,7 +176,7 @@ impl Map {
     }
 
     pub fn reveal_fov(&mut self, player_pos: Position) {
-        const VISION_RADIUS: i32 = 20;
+        const VISION_RADIUS: i32 = 15;
         let player_point = Point::new(player_pos.x, player_pos.y);
         
         // Use the field_of_view function to get visible tiles
