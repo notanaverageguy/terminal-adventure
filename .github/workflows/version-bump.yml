@@ -1,9 +1,11 @@
 name: Version Bump
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [closed]
-
+  
+    
 jobs:
   bump-version:
     if: github.event.pull_request.merged == true
