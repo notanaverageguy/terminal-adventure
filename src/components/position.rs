@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub};
+use std::ops::{Add, Div, Sub};
 
 use specs::prelude::*;
 use specs_derive::Component;
@@ -26,6 +26,39 @@ impl Add<Position> for Position {
         Position {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
+        }
+    }
+}
+
+impl Div<Position> for Position {
+    type Output = Position;
+
+    fn div(self, rhs: Position) -> Self::Output {
+        Position {
+            x: self.x / rhs.x,
+            y: self.y / rhs.y,
+        }
+    }
+}
+
+impl Add<isize> for Position {
+    type Output = Position;
+
+    fn add(self, rhs: isize) -> Self::Output {
+        Position {
+            x: self.x / rhs,
+            y: self.y / rhs,
+        }
+    }
+}
+
+impl Div<isize> for Position {
+    type Output = Position;
+
+    fn div(self, rhs: isize) -> Self::Output {
+        Position {
+            x: self.x / rhs,
+            y: self.y / rhs,
         }
     }
 }

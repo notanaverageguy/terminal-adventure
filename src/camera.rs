@@ -39,13 +39,15 @@ impl Camera {
     }
 
     pub fn render(&mut self) {
+        print!("{:?}", self.pos);
         let mut stdout = stdout();
 
         let terminal_size = terminal::size().unwrap();
 
         for (pos, renderable) in &self.buffer {
-            let mut adjusted_pos: Position = *pos + self.pos;
-            adjusted_pos.y = terminal_size.1 as isize - adjusted_pos.y - 2;
+            let mut adjusted_pos: Position = *pos - self.pos;
+            adjusted_pos.y = terminal_size.1 as isize - adjusted_pos.y - 1;
+            // adjusted_pos.y = 0;
 
             if !Self::is_visible(terminal_size, adjusted_pos) {
                 continue;
@@ -68,7 +70,7 @@ impl Camera {
     pub fn is_visible(terminal_size: (u16, u16), pos: Position) -> bool {
         pos.x >= 0
             && pos.y >= 0
-            && pos.x < terminal_size.0 as isize - 1
-            && pos.y < terminal_size.1 as isize - 1
+            && pos.x < terminal_size.0 as isize
+            && pos.y < terminal_size.1 as isize
     }
 }
