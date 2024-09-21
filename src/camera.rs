@@ -39,7 +39,7 @@ impl Camera {
     }
 
     pub fn render(&mut self) {
-        print!("{:?}", self.pos);
+        // print!("{:?}", self.pos);
         let mut stdout = stdout();
 
         let terminal_size = terminal::size().unwrap();

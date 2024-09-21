@@ -16,7 +16,7 @@ const FPS: u64 = 20; // Desired frames per second
 const FRAME_DURATION: Duration = Duration::from_millis(1000 / FPS);
 
 pub struct Ctx {
-    cam: Camera,
+    pub cam: Camera,
     pub input_handler: InputHandler,
 }
 

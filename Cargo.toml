@@ -4,6 +4,7 @@ version = "0.1.3"
 edition = "2021"
 
 [dependencies]
+bracket-lib = "0.8.7"
 crossterm = "0.28.1"
 rand = "0.8.5"
 specs = "0.20.0"

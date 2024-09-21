@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-
+use bracket_lib::prelude::{field_of_view, Algorithm2D, BaseMap, Point};
 use rand::Rng;
 
 use crate::{
@@ -40,9 +40,17 @@ impl Tile {
 
 pub struct Map {
     tiles: HashMap<Position, Tile>,
+    revealed_tiles: HashMap<Position, Tile>,
 }
 
 impl Map {
+    fn new(tiles: HashMap<Position, Tile>) -> Self {
+        Map {
+            tiles: tiles,
+            revealed_tiles: HashMap::new()
+        }
+    }
+
     pub fn new_map() -> Self {
         let mut tiles: HashMap<Position, Tile> = HashMap::new();
 
@@ -55,11 +63,11 @@ impl Map {
             }
         }
 
-        Map { tiles }
+        Map::new(tiles)
     }
 
     pub fn draw_map(&self, ctx: &mut Ctx) {
-        for (pos, tile) in &self.tiles {
+        for (pos, tile) in &self.revealed_tiles {
             ctx.set(pos, &tile.to_renderable());
         }
     }
@@ -156,6 +164,55 @@ impl Map {
         }
 
 
-        (rooms[0].center(), Map { tiles })
+        (rooms[0].center(), Map::new(tiles))
     }
+
+    pub fn reveal_tile(&mut self, new_pos: Position) {
+        let tile = self.tiles.get(&new_pos);
+
+        if let Some(tile) = tile {
+            self.revealed_tiles.insert(new_pos, *tile);
+        }
+    }
+
+    pub fn reveal_fov(&mut self, player_pos: Position) {
+        const VISION_RADIUS: i32 = 20;
+        let player_point = Point::new(player_pos.x, player_pos.y);
+        
+        // Use the field_of_view function to get visible tiles
+        let fov_tiles: Vec<Point> = field_of_view(player_point, VISION_RADIUS, self);
+        // Reveal each tile in the FOV
+        for p in fov_tiles {
+            self.reveal_tile(Position { x: p.x as isize, y: p.y as isize});
+        }
+    }
+}
+
+impl Algorithm2D for Map {
+    fn dimensions(&self) -> Point {
+        // Return the width and height of the map. Adjust these values based on your map size.
+        Point::new(160, 100) // Example: map size 160x100
+    }
+    fn point2d_to_index(&self, pt: Point) -> usize {
+        // If using a fixed width grid, convert 2D coordinates to a 1D index
+        (pt.y * 160 + pt.x) as usize // Assuming a map width of 160
+    }
+
+    fn index_to_point2d(&self, idx: usize) -> Point {
+        // Convert a 1D index back into a 2D coordinate
+        let x = (idx % 160) as isize;
+        let y = (idx / 160) as isize;
+        Point::new(x, y)
+    }
+}
+
+impl BaseMap for Map {
+    fn is_opaque(&self, idx: usize) -> bool {
+        let pos = self.index_to_point2d(idx);
+        match self.get_tile_at(Position { x: pos.x as isize, y: pos.y as isize}) {
+            Some(Tile::Wall) => true,  // Walls are opaque
+            _ => false,                // Floors and others are transparent
+        }
+    }
+
 }
