@@ -1,8 +1,8 @@
-use std::io::{stdout, Write};
+use std::{collections::HashMap, io::{stdout, Write}};
 
 use crossterm::{cursor, style::Print, terminal, QueueableCommand};
 
-use crate::components::{position::Position, renderable::Renderable};
+use crate::{components::{position::Position, renderable::Renderable}, utils::color::Color};
 
 pub struct Camera {
     pub pos: Position,
@@ -39,10 +39,29 @@ impl Camera {
     }
 
     pub fn render(&mut self) {
-        // print!("{:?}", self.pos);
         let mut stdout = stdout();
 
         let terminal_size = terminal::size().unwrap();
+
+        // Create a HashMap for all positions with empty pixels
+        let mut buffer: HashMap<Position, Renderable> = HashMap::new();
+
+        for x in 0..terminal_size.0 {
+            for y in 0..terminal_size.1 {
+                let x = x as isize;
+                let y = y as isize;
+                let pos = Position {x, y};
+
+                let renderable = Renderable {
+                    glyph: ' ',
+                    fg: Color::Default,
+                    bg: Color::Default
+                };
+
+                buffer.insert(pos, renderable);
+
+            }
+        }
 
         for (pos, renderable) in &self.buffer {
             let mut adjusted_pos: Position = *pos - self.pos;
@@ -53,14 +72,25 @@ impl Camera {
                 continue;
             }
 
-            stdout
-                .queue(cursor::MoveTo(adjusted_pos.x as u16, adjusted_pos.y as u16))
-                .unwrap();
-            stdout.queue(Print(renderable.to_string())).unwrap();
+            buffer.insert(adjusted_pos, *renderable);
+
+            // stdout
+            //     .queue(cursor::MoveTo(adjusted_pos.x as u16, adjusted_pos.y as u16))
+            //     .unwrap();
+            // stdout.queue(Print(renderable.to_string())).unwrap();
             // print!("{adjusted_pos:?}");
         }
         // stdout.queue(cursor::MoveTo(0, 0));
         // print!("{:?}", self.pos);
+
+        for (pos, renderable) in buffer {
+            stdout
+                .queue(cursor::MoveTo(pos.x as u16, pos.y as u16))
+                .unwrap();
+
+            stdout.queue(Print(renderable.to_string())).unwrap();
+
+        }
 
         stdout.flush().unwrap();
 
