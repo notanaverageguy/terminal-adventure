@@ -6,6 +6,6 @@ edition = "2021"
 [dependencies]
 bracket-lib = "0.8.7"
 crossterm = "0.28.1"
-rand = "0.8.5"
+rand = "0.9.3"
 specs = "0.20.0"
 specs-derive = "0.4.1"
